@@ -19,3 +19,14 @@ function wcbp_register_bundle_product_type() {
 	}
 }
 add_action('init', 'wcbp_register_bundle_product_type');
+
+
+/**
+ * Add Product Type Selector
+ */
+function wcbp_add_product_type_selector($type) {
+	$type['bundle_product'] = 'Bundle product';
+
+	return $type;
+}
+add_filter('product_type_selector','wcbp_add_product_type_selector');
