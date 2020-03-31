@@ -41,9 +41,34 @@ function wcbp_add_product_data_tabs( $tabs ) {
 	$tabs['bundle_product'] = array(
 		'label'  => 'Bundle product',
 		'target' => 'bundle_product_opt',
+		'class'  => 'show_if_bundle_product'
 	);
 
 	return $tabs;
 }
 
 add_filter( 'woocommerce_product_data_tabs', 'wcbp_add_product_data_tabs' );
+
+
+/**
+ * Add Product Data Panels
+ */
+function wcbp_add_product_data_panels() {
+	?>
+    <div id='bundle_product_opt' class='panel woocommerce_options_panel'>
+        <div class="options_group">
+			<?php
+			woocommerce_wp_text_input( array(
+				'id'          => 'wcbp_bundle_product_id',
+				'label'       => 'Product ID\'s',
+				'placeholder' => '1,2,3',
+				'desc_tip'    => 'true',
+				'description' => 'Enter Product ID\'s Separate by comma(,).',
+			) );
+			?>
+        </div>
+    </div>
+	<?php
+}
+
+add_action( 'woocommerce_product_data_panels', 'wcbp_add_product_data_panels' );
