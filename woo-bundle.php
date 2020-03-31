@@ -72,3 +72,15 @@ function wcbp_add_product_data_panels() {
 }
 
 add_action( 'woocommerce_product_data_panels', 'wcbp_add_product_data_panels' );
+
+
+/**
+ * Save Product Meta
+ */
+function wcbp_save_product_meta( $post_id ) {
+	if ( isset( $_POST['wcbp_bundle_product_id'] ) ) {
+		update_post_meta( $post_id, 'wcbp_bundle_product_id', sanitize_text_field( $_POST['wcbp_bundle_product_id'] ) );
+	}
+}
+
+add_action( 'woocommerce_process_product_meta', 'wcbp_save_product_meta' );
