@@ -51,6 +51,35 @@ add_filter( 'woocommerce_product_data_tabs', 'wcbp_add_product_data_tabs' );
 
 
 /**
+ * Add Custom JS
+ */
+function wcbp_add_custom_js() {
+
+	global $post;
+
+	if ( ! $post ) {
+		return;
+	}
+
+	if ( 'product' == $post->post_type ) {
+		?>
+
+        <script type='text/javascript'>
+            jQuery(document).ready(function () {
+                //for Price tab
+                jQuery('.product_data_tabs .general_tab').addClass('show_if_bundle_product').show();
+                jQuery('#general_product_data .pricing').addClass('show_if_bundle_product').show();
+            });
+        </script>
+
+		<?php
+	}
+}
+
+add_filter( 'admin_footer', 'wcbp_add_custom_js' );
+
+
+/**
  * Add Product Data Panels
  */
 function wcbp_add_product_data_panels() {
@@ -84,3 +113,38 @@ function wcbp_save_product_meta( $post_id ) {
 }
 
 add_action( 'woocommerce_process_product_meta', 'wcbp_save_product_meta' );
+
+
+/**
+ * Bundle Product Front-End
+ */
+function wcbp_bundle_product_frontend() {
+	global $product;
+
+	if ( 'bundle_product' == $product->get_type() ) {
+		?>
+
+        <form class="gift_card_cart" method="post" enctype='multipart/form-data'>
+
+            <h3>
+				<?php
+				$get_product_ids = get_post_meta( $product->get_id(), 'wcbp_bundle_product_id', true );
+
+				if ( isset( $get_product_ids[0] ) ) {
+					echo $get_product_ids;
+
+
+				}
+
+				?>
+            </h3>
+
+            <button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>"
+                    class="single_add_to_cart_button button alt"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
+        </form>
+
+		<?php
+	}
+}
+
+add_action( 'woocommerce_single_product_summary', 'wcbp_bundle_product_frontend' );
