@@ -124,7 +124,7 @@ function wcbp_bundle_product_frontend() {
 	if ( 'bundle_product' == $product->get_type() ) {
 		?>
 
-        <form class="gift_card_cart" method="post" enctype='multipart/form-data'>
+        <form class="cart" method="post" enctype='multipart/form-data'>
 
             <h3>
 				<?php
@@ -138,6 +138,14 @@ function wcbp_bundle_product_frontend() {
 
 				?>
             </h3>
+
+<?php woocommerce_quantity_input(
+		array(
+			'min_value'   => apply_filters( 'woocommerce_quantity_input_min', $product->get_min_purchase_quantity(), $product ),
+			'max_value'   => apply_filters( 'woocommerce_quantity_input_max', $product->get_max_purchase_quantity(), $product ),
+			'input_value' => isset( $_POST['quantity'] ) ? wc_stock_amount( wp_unslash( $_POST['quantity'] ) ) : $product->get_min_purchase_quantity(), // WPCS: CSRF ok, input var ok.
+		)
+	); ?>
 
             <button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>"
                     class="single_add_to_cart_button button alt"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
